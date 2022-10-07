@@ -60,7 +60,7 @@ def read_sales():
     for sale in sale_models:
         sale_dict = {
             "id": sale.id,
-            "type": sale.type,
+            "type": sale.sale_type.description,
             "seller": sale.seller,
             "product": sale.product,
             "value": sale.value,
