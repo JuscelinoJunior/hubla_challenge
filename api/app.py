@@ -4,10 +4,13 @@ from sqlalchemy.orm import Session
 from persistency import db_engine
 from persistency.models.sale_model import Sale
 from persistency.sales_persistency import retrieve_sales
+from utils.sale_utils import (
+    convert_value_in_cents_to_reals,
+    remove_final_spaces_in_a_string,
+    convert_date_text_to_datetime,
+)
 
 app = Flask(__name__)
-
-error_message = {"Error": "Internal Error"}
 
 
 @app.route("/upload_sales", methods=["POST"])
@@ -19,10 +22,17 @@ def upload_file():
     sale_models = []
 
     for line in data.splitlines():
-        sale_model = Sale()
+        sale_model = Sale(
+            type=line[0],
+            date=convert_date_text_to_datetime(line[1:25]),
+            product=remove_final_spaces_in_a_string(line[26:55]),
+            value=convert_value_in_cents_to_reals(int(line[56:65])),
+            seller=line[66:85],
+        )
         sale_model.type = line[0]
-        sale_model.product = line[26:55]
-        sale_model.value = line[56:65]
+        sale_model.date = convert_date_text_to_datetime(line[1:25])
+        sale_model.product = remove_final_spaces_in_a_string(line[26:55])
+        sale_model.value = convert_value_in_cents_to_reals(int(line[56:65]))
         sale_model.seller = line[66:85]
         sale_models.append(sale_model)
 
