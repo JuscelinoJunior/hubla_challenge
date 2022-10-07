@@ -1,0 +1,16 @@
+repos:
+# Add hook for black code formatter
+  - repo: https://github.com/ambv/black
+    rev: stable
+    hooks:
+      - id: black
+        language_version: python3
+  - repo: local
+    hooks:
+      - id: prospector
+        name: prospector
+        description: Analyze Python code using Prospector
+        entry: prospector
+        language: python
+        types: [python]
+        require_serial: true

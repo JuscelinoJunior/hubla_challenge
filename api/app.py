@@ -57,9 +57,9 @@ def upload_file():
     try:
         db_session.bulk_save_objects(sale_models)
         db_session.commit()
-    except Exception as e:
+    except Exception as error:
         db_session.rollback()
-        print(e)
+        print(error)
     finally:
         db_session.close()
 
@@ -74,7 +74,13 @@ def read_sales():
 
     sales_response = []
     for sale in sale_models:
-        sale_dict = {"id": sale.id, "type": sale.type, "seller": sale.seller, "product": sale.product, "value": sale.value}
+        sale_dict = {
+            "id": sale.id,
+            "type": sale.type,
+            "seller": sale.seller,
+            "product": sale.product,
+            "value": sale.value,
+        }
         sales_response.append(sale_dict)
 
     return jsonify(sales_response)
