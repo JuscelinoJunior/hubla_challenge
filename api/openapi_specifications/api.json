@@ -1,0 +1,173 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API",
+    "version": "0.0.1",
+    "description": "This section describes all operations that can be executed on the API."
+  },
+  "servers": [
+    {
+      "url": "https://0.0.0.0:8080"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "UploadSalesResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Defines the sale identifier",
+            "example": 12
+          },
+          "type": {
+            "type": "integer",
+            "example": 1
+          },
+          "product": {
+            "type": "string",
+            "example": "CURSO DE BEM-ESTAR"
+          },
+          "seller": {
+            "type": "string",
+            "example": "JOSE CARLOS"
+          },
+          "date": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number",
+            "example": 12.75
+          }
+        }
+      },
+      "SalesResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Defines the sale identifier",
+            "example": 12
+          },
+          "type": {
+            "type": "string",
+            "example": "Venda produtor"
+          },
+          "product": {
+            "type": "string",
+            "example": "CURSO DE BEM-ESTAR"
+          },
+          "seller": {
+            "type": "string",
+            "example": "JOSE CARLOS"
+          },
+          "date": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number",
+            "example": 12.75
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/upload_sales": {
+      "summary": "Responsible for upload a file with sales.",
+      "post": {
+        "operationId": "app.upload_sales",
+        "description": "Upload a .txt file with the sales to be stored.",
+        "tags": [
+          "Sales"
+        ],
+        "responses": {
+          "201": {
+            "description": "The sales were registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadSalesResponse"
+                },
+                "examples": {
+                  "example1": {
+                    "summary": "POST response",
+                    "value": {
+                      "id": 12,
+                      "model": "John",
+                      "color": "Doe"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+        "content": {
+          "multipart/form-data": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "file"
+              ],
+              "properties": {
+                "file": {
+                  "description": "Defines the model of the car",
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+      }
+    },
+    "/sales": {
+      "summary": "Responsible for creating a user or reading a list of car owners.",
+      "get": {
+        "operationId": "app.read_sales",
+        "description": "Retrieves a list of all sales.",
+        "tags": [
+          "Sales"
+        ],
+        "responses": {
+          "200": {
+            "description": "The sales list was retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SalesResponse"
+                },
+                "examples": {
+                  "example1": {
+                    "summary": "GET list response",
+                    "value": [
+                      {
+                        "id": 12,
+                        "date": "12/11/1998",
+                        "product": "CURSO DE BEM-ESTAR",
+                        "type": "Venda produtor",
+                        "value": 12.75,
+                        "seller": "JOSE CARLOS"
+                      },
+                      {
+                        "id": 13,
+                        "date": "12/11/1998",
+                        "product": "CURSO DE BEM-ESTAR",
+                        "type": "Venda afiliado",
+                        "value": 12.75,
+                        "seller": "MARIA CANDIDA"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
