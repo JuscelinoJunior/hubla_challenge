@@ -1,4 +1,6 @@
+import connexion
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from sqlalchemy.orm import Session
 
 from mappers.sales_mappers import (
@@ -12,8 +14,7 @@ from persistency.sales_persistency import retrieve_sales
 app = Flask(__name__)
 
 
-@app.route("/upload_sales", methods=["POST"])
-def upload_file():
+def upload_sales():
     sale_models = map_upload_file_request_to_model_list(request)
 
     db_session = Session(db_engine)
@@ -32,7 +33,6 @@ def upload_file():
     return jsonify(upload_file_response)
 
 
-@app.route("/sales", methods=["GET"])
 def read_sales():
     db_session = Session(db_engine)
 
@@ -44,4 +44,8 @@ def read_sales():
 
 
 if __name__ == "__main__":
+    app = connexion.FlaskApp(__name__, specification_dir="openapi_specifications/")
+    flask_app = app.app
+    CORS(flask_app)
+    app.add_api("api.json")
     app.run(debug=True)
