@@ -14,3 +14,12 @@ repos:
         language: python
         types: [python]
         require_serial: true
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        description: Analyze Python code using mypy
+        entry: prospector
+        language: python
+        types: [python]
+        require_serial: true

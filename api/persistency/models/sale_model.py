@@ -9,7 +9,9 @@ class Sale(Base):
     __tablename__ = "sale"
     __friendly_class_name__ = "Sale"
 
-    id = Column("sale_id", Integer, primary_key=True, nullable=False)
+    id = Column(
+        "sale_id", Integer, primary_key=True, autoincrement=True, nullable=False
+    )
     type = Column(Integer, ForeignKey(SaleType.id), nullable=False)
     date = Column(DateTime)
     product = Column(Text, nullable=False)
