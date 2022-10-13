@@ -1,7 +1,7 @@
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Tuple
 
 import connexion
-from flask import jsonify, request, Request, Response
+from flask import jsonify, request, Response
 from flask_cors import CORS
 from sqlalchemy.orm import Session
 
@@ -15,8 +15,13 @@ from persistency.models.sale_model import Sale
 from persistency.sales_persistency import retrieve_sales
 
 
-def upload_sales() -> Response:
-    sale_models: Request = map_upload_file_request_to_model_list(request)
+def upload_sales() -> Tuple[Response, int]:
+    """
+    Upload a txt file with sales and save it on the database.
+
+    :return: Response
+    """
+    sale_models: List[Sale] = map_upload_file_request_to_model_list(request)
 
     db_session: Session = Session(db_engine)
 
@@ -27,16 +32,20 @@ def upload_sales() -> Response:
         upload_file_response: List[
             Dict[str, Any]
         ] = map_sale_models_list_to_upload_file_response(sale_models)
-        return jsonify(upload_file_response)
+        return jsonify(upload_file_response), 201
     except Exception as exception:
         db_session.rollback()
-        print(exception)
         raise exception
     finally:
         db_session.close()
 
 
 def read_sales() -> Response:
+    """
+    Retrieve a list with all sales registered on the database.
+
+    :return: Response
+    """
     db_session = Session(db_engine)
 
     try:
@@ -44,9 +53,11 @@ def read_sales() -> Response:
         sales_response: List[Dict[str, Any]] = map_retrieved_sales_to_response(
             sale_models
         )
-        return jsonify(sales_response)
     except Exception as exception:
+        db_session.rollback()
         raise exception
+
+    return jsonify(sales_response)
 
 
 if __name__ == "__main__":

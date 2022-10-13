@@ -11,6 +11,17 @@ from utils.sale_utils import (
 
 
 def map_upload_file_request_to_model_list(request: Request):
+    """
+    Map a txt file to a list of sale models.
+
+    Read the file from the request. Convert the file to a string and iterate by the lines.
+    Each line is converted to a sale model.
+
+    :param request: The Flask request object
+    :type request: Request
+
+    :return: A list of sale models
+    """
     request_data: Dict[str, Any] = request.files.to_dict()
 
     file_data: str = request_data["file"].read().decode("ascii")
@@ -31,6 +42,15 @@ def map_upload_file_request_to_model_list(request: Request):
 
 
 def map_sale_models_list_to_upload_file_response(sale_models) -> List[Dict[str, Any]]:
+    """
+    Map a list of models to a list of dict to be used to the JSON response.
+
+    :param sale_models: a list with all sale models registered on the database
+    :type sale_models: List
+
+    :return: a list of dict to be used to the JSON response
+    :rtype: List
+    """
     upload_file_response: List[Dict[str, Any]] = []
 
     for sale in sale_models:
@@ -47,6 +67,16 @@ def map_sale_models_list_to_upload_file_response(sale_models) -> List[Dict[str, 
 
 
 def map_retrieved_sales_to_response(sale_models: List[Sale]) -> List[Dict[str, Any]]:
+    """
+    Map a list of models retrieved from the database to a list of dict to be used to the JSON response.
+
+    :param sale_models: a list with all sale models retrieved from the database
+    :type sale_models: List
+
+    :return: a list of dict to be used to the JSON response
+    :rtype: List
+    """
+
     retrieve_sales_response: List[Dict[str, Any]] = []
 
     for sale in sale_models:
