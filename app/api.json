@@ -12,109 +12,87 @@
   ],
   "components": {
     "schemas": {
-      "Car": {
+      "UploadSalesResponse": {
         "type": "object",
         "properties": {
           "id": {
             "type": "integer",
-            "description": "Defines the car identifier",
+            "description": "Defines the sale identifier",
             "example": 12
           },
-          "model": {
-            "type": "string",
-            "enum": [
-              "hatch",
-              "sedan",
-              "convertible"
-            ],
-            "example": "hatch"
-          },
-          "color": {
-            "type": "string",
-            "enum": [
-              "yellow",
-              "blue",
-              "gray"
-            ],
-            "example": "gray"
-          },
-          "owner-id": {
+          "type": {
             "type": "integer",
-            "description": "Defines the car owner identifier",
-            "example": 3
+            "example": 1
+          },
+          "product": {
+            "type": "string",
+            "example": "CURSO DE BEM-ESTAR"
+          },
+          "seller": {
+            "type": "string",
+            "example": "JOSE CARLOS"
+          },
+          "date": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number",
+            "example": 12.75
           }
         }
       },
-      "Owner": {
+      "Sales": {
         "type": "object",
         "properties": {
           "id": {
             "type": "integer",
-            "description": "Defines the owner identifier",
+            "description": "Defines the sale identifier",
             "example": 12
           },
-          "first-name": {
+          "type": {
             "type": "string",
-            "description": "Defines the owner's first name.",
-            "example": "John"
+            "example": "Venda produtor"
           },
-          "last-name": {
+          "product": {
             "type": "string",
-            "description": "Defines the owner's last name.",
-            "example": "Doe"
+            "example": "CURSO DE BEM-ESTAR"
+          },
+          "date": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number",
+            "example": 12.75
+          }
+        }
+      },
+      "SalesResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties":{
+            "$ref": "#/components/schemas/Sales"
           }
         }
       }
     }
   },
   "paths": {
-    "/cars": {
-      "summary": "Responsible for creating a car or reading a list of car cars.",
-      "get": {
-        "operationId": "app.read_all_cars",
-        "description": "Retrieves a list of car cars.",
-        "tags": [
-          "Cars"
-        ],
-        "responses": {
-          "200": {
-            "description": "The cars list was retrieved successfully.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Car"
-                },
-                "examples": {
-                  "example1": {
-                    "summary": "GET cars list response",
-                    "value": [
-                      {
-                        "id": 12,
-                        "model": "John",
-                        "color": "Doe",
-                        "owner-id": 1
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
+    "/upload_sales": {
+      "summary": "Responsible for upload a file with sales.",
       "post": {
-        "operationId": "app.create_car",
-        "description": "Creates a new car according to the defined body parameters.",
+        "operationId": "app.upload_sales",
+        "description": "Upload a .txt file with the sales to be stored.",
         "tags": [
-          "Cars"
+          "Sales"
         ],
         "responses": {
           "201": {
-            "description": "The car was created successfully",
+            "description": "The sales were registered successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Car"
+                  "$ref": "#/components/schemas/UploadSalesResponse"
                 },
                 "examples": {
                   "example1": {
@@ -132,41 +110,17 @@
         },
         "requestBody": {
         "content": {
-          "application/json": {
+          "multipart/form-data": {
             "schema": {
               "type": "object",
               "required": [
-                "model",
-                "color",
-                "owner-id"
+                "file"
               ],
               "properties": {
-                "model": {
-                  "description": "Defines the model of the car",
+                "file": {
+                  "description": "Defines the a .txt file to be uploaded",
                   "type": "string",
-                  "enum": [
-                    "hatch",
-                    "sedan",
-                    "convertible"
-                  ],
-                  "example": "hatch"
-                },
-                "color": {
-                  "description": "Defines the color of the car",
-                  "type": "string",
-                  "enum": [
-                    "yellow",
-                    "blue",
-                    "gray"
-                  ],
-                  "example": "gray"
-                },
-                "owner-id": {
-                  "description": "Defines the car owner identifier.",
-                  "example": 1,
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 9223372036854775807
+                  "format": "binary"
                 }
               }
             }
@@ -175,124 +129,59 @@
       }
       }
     },
-    "/cars/{car_id}": {
-      "summary": "Responsible for reading or deleting a given owner.",
-      "delete": {
-        "operationId": "app.delete_car",
-        "description": "Deletes a car based on a given identifier.",
-        "tags": [
-          "Cars"
-        ],
-        "responses": {
-          "204": {
-            "description": "The car was deleted successfully"
-          }
-        }
-      }
-    },
-    "/owners": {
-      "summary": "Responsible for creating a user or reading a list of car owners.",
+    "/sales": {
+      "summary": "Responsible for upload a sales file or red sales.",
       "get": {
-        "operationId": "app.read_all_owners",
-        "description": "Retrieves a list of car owners according to the defined filters.",
+        "operationId": "app.read_sales",
+        "description": "Retrieves a list of all sales.",
         "tags": [
-          "Owners"
+          "Sales"
         ],
         "responses": {
           "200": {
-            "description": "The cars list was retrieved successfully.",
+            "description": "The sales list was retrieved successfully.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Owner"
+                  "$ref": "#/components/schemas/SalesResponse"
                 },
                 "examples": {
                   "example1": {
                     "summary": "GET list response",
-                    "value": [
-                      {
-                        "id": 12,
-                        "first-name": "John",
-                        "last-name": "Doe"
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "operationId": "app.create_owner",
-        "description": "Creates a new owner according to the defined body parameters.",
-        "tags": [
-          "Owners"
-        ],
-        "responses": {
-          "201": {
-            "description": "The owner was created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Owner"
-                },
-                "examples": {
-                  "example1": {
-                    "summary": "POST owner response",
-                    "value": {
-                      "id": 12,
-                      "first-name": "John",
-                      "last-name": "Doe"
+                    "value":
+                    {
+                      "JOSE CARLOS":
+                        [
+                          {
+                            "id": 12,
+                            "date": "12/11/1998",
+                            "product": "CURSO DE BEM-ESTAR",
+                            "type": "Venda produtor",
+                            "value": 12.75
+                          }
+                        ],
+                      "MARIA CANDIDA":
+                        [
+                          {
+                            "id": 13,
+                            "date": "12/11/1998",
+                            "product": "CURSO DE BEM-ESTAR",
+                            "type": "Venda afiliado",
+                            "value": 12.75
+                          },
+                          {
+                            "id": 14,
+                            "date": "12/11/1998",
+                            "product": "CURSO DE BEM-ESTAR",
+                            "type": "Comissão paga",
+                            "value": 3
+                          }
+                      ]
                     }
                   }
                 }
               }
             }
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "first-name",
-                  "last-name"
-                ],
-                "properties": {
-                  "first-name": {
-                    "description": "Defines the owner first name.",
-                    "minLength": 0,
-                    "maxLength": 60,
-                    "example": "John",
-                    "type": "string"
-                  },
-                  "last-name": {
-                    "description": "Defines the owner last name.",
-                    "minLength": 0,
-                    "maxLength": 60,
-                    "example": "Doe",
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/owners/{owner_id}": {
-      "summary": "Responsible for reading or deleting a given owner.",
-      "delete": {
-        "operationId": "app.delete_owner",
-        "description": "Deletes a car based on a given identifier.",
-        "tags": [
-          "Owners"
-        ],
-        "responses": {
-          "204": {
-            "description": "The owner was deleted successfully"
           }
         }
       }
