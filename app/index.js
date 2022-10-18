@@ -22,7 +22,7 @@ function uploadFile() {
     if (this.readyState === 4) {
       const objects = JSON.parse(this.responseText);
       if (this.status !== 200) {
-        Swal.fire({icon: "error", text: "ERROU!"})
+        Swal.fire({icon: "error", text: objects["detail"]})
       } else {
         Swal.fire({icon: "success", text: "Sales registered successfully!"});
         loadTable();

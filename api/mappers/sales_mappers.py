@@ -3,7 +3,7 @@ from typing import List, Dict, Any
 from flask import Request
 
 from persistency.models.sale_model import Sale
-from utils.sale_utils import (
+from utils.sales_utils import (
     convert_date_text_to_datetime,
     remove_final_spaces_in_a_string,
     convert_value_in_cents_to_reals,
@@ -22,7 +22,7 @@ def map_upload_file_request_to_model_list(request: Request):
 
     :return: A list of sale models
     """
-    request_data: Dict[str, Any] = request.files.to_dict()
+    request_data: Dict[str, Any] = request.files
 
     file_data: str = request_data["file"].read().decode("ascii")
 
@@ -31,9 +31,9 @@ def map_upload_file_request_to_model_list(request: Request):
     for line in file_data.splitlines():
         sale_model: Sale = Sale(
             type=line[0],
-            date=convert_date_text_to_datetime(line[1:25]),
-            product=remove_final_spaces_in_a_string(line[26:55]),
-            value=convert_value_in_cents_to_reals(int(line[56:65])),
+            date=convert_date_text_to_datetime(line[1:26]),
+            product=remove_final_spaces_in_a_string(line[26:56]),
+            value=convert_value_in_cents_to_reals(int(line[56:66])),
             seller=line[66:85],
         )
         sale_models.append(sale_model)
