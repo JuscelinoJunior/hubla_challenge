@@ -26,7 +26,7 @@ def upload_sales() -> Tuple[Response, int]:
     db_session: Session = Session(db_engine)
 
     try:
-        db_session.bulk_save_objects(sale_models)
+        db_session.bulk_save_objects(sale_models, return_defaults=True)
         db_session.commit()
 
         upload_file_response: List[
