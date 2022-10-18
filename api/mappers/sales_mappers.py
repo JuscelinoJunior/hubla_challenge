@@ -66,7 +66,9 @@ def map_sale_models_list_to_upload_file_response(sale_models) -> List[Dict[str, 
     return upload_file_response
 
 
-def map_retrieved_sales_to_response(sale_models: List[Sale]) -> List[Dict[str, Any]]:
+def map_retrieved_sales_to_response(
+    sale_models: List[Sale],
+) -> Dict[str, List[Dict[str, Any]]]:
     """
     Map a list of models retrieved from the database to a list of dict to be used to the JSON response.
 
@@ -77,16 +79,19 @@ def map_retrieved_sales_to_response(sale_models: List[Sale]) -> List[Dict[str, A
     :rtype: List
     """
 
-    retrieve_sales_response: List[Dict[str, Any]] = []
+    retrieve_sales_response: Dict[str, List[Dict[str, Any]]] = {}
 
     for sale in sale_models:
+        if sale.seller not in retrieve_sales_response:
+            retrieve_sales_response[sale.seller] = []
+
         sale_dict: Dict[str, Any] = {
             "id": sale.id,
             "type": sale.sale_type.description,
             "date": sale.date,
-            "seller": sale.seller,
             "product": sale.product,
             "value": sale.value,
         }
-        retrieve_sales_response.append(sale_dict)
+
+        retrieve_sales_response[sale.seller].append(sale_dict)
     return retrieve_sales_response

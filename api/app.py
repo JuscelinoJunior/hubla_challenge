@@ -50,9 +50,9 @@ def read_sales() -> Response:
 
     try:
         sale_models: List[Sale] = retrieve_sales(db_session)
-        sales_response: List[Dict[str, Any]] = map_retrieved_sales_to_response(
-            sale_models
-        )
+        sales_response: Dict[
+            str, List[Dict[str, Any]]
+        ] = map_retrieved_sales_to_response(sale_models)
     except Exception as exception:
         db_session.rollback()
         raise exception
