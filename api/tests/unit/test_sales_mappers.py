@@ -1,6 +1,7 @@
 import os
 
 from flask import Request
+from werkzeug.datastructures import FileStorage
 
 from mappers.sales_mappers import (
     map_sale_models_list_to_upload_file_response,
@@ -109,7 +110,9 @@ def test_map_upload_file_request_to_model_list(create_sales_file):
 
     try:
         # Create a new txt file and write sales to use to request
-        file_parameters = {"file": open(sales_file, "rb")}
+        file_parameters = {
+            "file": FileStorage(stream=open(sales_file, "rb"), filename=sales_file)
+        }
 
         # Create a flask request instance with the file example to use as parameter
         request = Request(environ={})

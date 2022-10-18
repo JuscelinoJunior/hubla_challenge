@@ -13,4 +13,3 @@ mysqlclient==2.1.1
 mypy==0.982
 DateTime==4.7
 python-dateutil==2.8.2
-pytest-mock==3.10.0

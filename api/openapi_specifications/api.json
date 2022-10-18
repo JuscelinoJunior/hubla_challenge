@@ -41,7 +41,7 @@
           }
         }
       },
-      "SalesResponse": {
+      "Sales": {
         "type": "object",
         "properties": {
           "id": {
@@ -57,16 +57,21 @@
             "type": "string",
             "example": "CURSO DE BEM-ESTAR"
           },
-          "seller": {
-            "type": "string",
-            "example": "JOSE CARLOS"
-          },
           "date": {
             "type": "string"
           },
           "value": {
             "type": "number",
             "example": 12.75
+          }
+        }
+      },
+      "SalesResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties":{
+            "$ref": "#/components/schemas/Sales"
           }
         }
       }
@@ -113,7 +118,7 @@
               ],
               "properties": {
                 "file": {
-                  "description": "Defines the model of the car",
+                  "description": "Defines the a .txt file to be uploaded",
                   "type": "string",
                   "format": "binary"
                 }
@@ -125,7 +130,7 @@
       }
     },
     "/sales": {
-      "summary": "Responsible for creating a user or reading a list of car owners.",
+      "summary": "Responsible for upload a sales file or red sales.",
       "get": {
         "operationId": "app.read_sales",
         "description": "Retrieves a list of all sales.",
@@ -143,24 +148,36 @@
                 "examples": {
                   "example1": {
                     "summary": "GET list response",
-                    "value": [
-                      {
-                        "id": 12,
-                        "date": "12/11/1998",
-                        "product": "CURSO DE BEM-ESTAR",
-                        "type": "Venda produtor",
-                        "value": 12.75,
-                        "seller": "JOSE CARLOS"
-                      },
-                      {
-                        "id": 13,
-                        "date": "12/11/1998",
-                        "product": "CURSO DE BEM-ESTAR",
-                        "type": "Venda afiliado",
-                        "value": 12.75,
-                        "seller": "MARIA CANDIDA"
-                      }
-                    ]
+                    "value":
+                    {
+                      "JOSE CARLOS":
+                        [
+                          {
+                            "id": 12,
+                            "date": "12/11/1998",
+                            "product": "CURSO DE BEM-ESTAR",
+                            "type": "Venda produtor",
+                            "value": 12.75
+                          }
+                        ],
+                      "MARIA CANDIDA":
+                        [
+                          {
+                            "id": 13,
+                            "date": "12/11/1998",
+                            "product": "CURSO DE BEM-ESTAR",
+                            "type": "Venda afiliado",
+                            "value": 12.75
+                          },
+                          {
+                            "id": 14,
+                            "date": "12/11/1998",
+                            "product": "CURSO DE BEM-ESTAR",
+                            "type": "Comissão paga",
+                            "value": 3
+                          }
+                      ]
+                    }
                   }
                 }
               }
