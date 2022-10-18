@@ -5,6 +5,7 @@ from flask import jsonify, request, Response
 from flask_cors import CORS
 from sqlalchemy.orm import Session
 
+from exceptions.exception_handler import JSONExceptionHandler
 from mappers.sales_mappers import (
     map_upload_file_request_to_model_list,
     map_sale_models_list_to_upload_file_response,
@@ -53,6 +54,7 @@ def read_sales() -> Response:
         sales_response: Dict[
             str, List[Dict[str, Any]]
         ] = map_retrieved_sales_to_response(sale_models)
+
     except Exception as exception:
         db_session.rollback()
         raise exception
@@ -64,5 +66,6 @@ if __name__ == "__main__":
     app = connexion.FlaskApp(__name__, specification_dir="openapi_specifications/")
     flask_app = app.app
     CORS(flask_app)
+    handler = JSONExceptionHandler(app)
     app.add_api("api.json")
     app.run(debug=True)

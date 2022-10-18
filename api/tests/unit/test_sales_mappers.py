@@ -65,7 +65,6 @@ def test_map_retrieved_sales_to_response():
         "date": convert_date_text_to_datetime("2022-01-15T19:20:30-03"),
         "product": "CURSO DE BEM-ESTAR",
         "value": 12.75,
-        "seller": "JOSE CARLOS",
     }
 
     expected_dict_two = {
@@ -74,8 +73,9 @@ def test_map_retrieved_sales_to_response():
         "date": convert_date_text_to_datetime("2022-01-15T19:20:30-03"),
         "product": "CURSO DE BEM-ESTAR",
         "value": 12.75,
-        "seller": "JOSE CARLOS",
     }
+
+    expected_response = {"JOSE CARLOS": [expected_dict_one, expected_dict_two]}
 
     sale_type_model = SaleType(description="Venda produtor")
 
@@ -85,7 +85,7 @@ def test_map_retrieved_sales_to_response():
         date=expected_dict_one["date"],
         product=expected_dict_one["product"],
         value=expected_dict_one["value"],
-        seller=expected_dict_one["seller"],
+        seller="JOSE CARLOS",
     )
 
     sale_model_two = Sale(
@@ -94,21 +94,22 @@ def test_map_retrieved_sales_to_response():
         date=expected_dict_two["date"],
         product=expected_dict_two["product"],
         value=expected_dict_two["value"],
-        seller=expected_dict_two["seller"],
+        seller="JOSE CARLOS",
     )
 
     sale_models = [sale_model_one, sale_model_two]
 
     mapped_dict = map_retrieved_sales_to_response(sale_models)
 
-    assert mapped_dict[0] == expected_dict_one
-    assert mapped_dict[1] == expected_dict_two
+    assert mapped_dict == expected_response
 
 
 def test_map_upload_file_request_to_model_list(create_sales_file):
+    sales_file = create_sales_file()
+
     try:
         # Create a new txt file and write sales to use to request
-        file_parameters = {"file": open(create_sales_file, "rb")}
+        file_parameters = {"file": open(sales_file, "rb")}
 
         # Create a flask request instance with the file example to use as parameter
         request = Request(environ={})
@@ -118,5 +119,5 @@ def test_map_upload_file_request_to_model_list(create_sales_file):
 
         assert sale_models[0].value == 127.5
     finally:
-        if os.path.exists(create_sales_file):
-            os.remove(create_sales_file)
+        if os.path.exists(sales_file):
+            os.remove(sales_file)
