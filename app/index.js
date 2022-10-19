@@ -15,12 +15,12 @@ function uploadFile() {
   formData.append("file", document.getElementById("file").files[0]);
 
   const xhttp = new XMLHttpRequest();
-  xhttp.open("POST", "http://127.0.0.1:5000/upload_sales");
+  xhttp.open("POST", "http://0.0.0.0:5050/upload_sales");
   xhttp.send(formData);
   xhttp.onreadystatechange = function() {
     if (this.readyState === 4) {
       const objects = JSON.parse(this.responseText);
-      if (this.status !== 200) {
+      if (this.status !== 201) {
         Swal.fire({icon: "error", text: objects["detail"]})
       } else {
         Swal.fire({icon: "success", text: "Sales registered successfully!"});
@@ -33,7 +33,7 @@ function uploadFile() {
 
 function loadTable() {
   const xhttp_owners = new XMLHttpRequest();
-  xhttp_owners.open("GET", "http://127.0.0.1:5000/sales");
+  xhttp_owners.open("GET", "http://0.0.0.0:5050/sales");
   xhttp_owners.send();
   xhttp_owners.onreadystatechange = function() {
     let tableHTML;
