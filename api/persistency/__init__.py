@@ -5,4 +5,4 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 # Database connection
-db_engine = create_engine("mysql+mysqldb://root:root@127.0.0.1/hubla_sales")
+db_engine = create_engine("mysql+mysqldb://root:root@172.16.242.5/hubla_sales")

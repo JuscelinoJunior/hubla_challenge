@@ -15,7 +15,7 @@ function uploadFile() {
   formData.append("file", document.getElementById("file").files[0]);
 
   const xhttp = new XMLHttpRequest();
-  xhttp.open("POST", "http://0.0.0.0:5050/upload_sales");
+  xhttp.open("POST", "http://0.0.0.0:8080/upload_sales");
   xhttp.send(formData);
   xhttp.onreadystatechange = function() {
     if (this.readyState === 4) {
@@ -33,7 +33,7 @@ function uploadFile() {
 
 function loadTable() {
   const xhttp_owners = new XMLHttpRequest();
-  xhttp_owners.open("GET", "http://0.0.0.0:5050/sales");
+  xhttp_owners.open("GET", "http://0.0.0.0:8080/sales");
   xhttp_owners.send();
   xhttp_owners.onreadystatechange = function() {
     let tableHTML;
